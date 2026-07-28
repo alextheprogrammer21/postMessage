@@ -1,24 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>3DS Complete</title>
+  <title>3DS Complete</title>
 </head>
 <body>
-  <script>
-    // Prefer a specific origin instead of "*"
-    const parentOrigin = "https://your-actual-frontend-domain.com";
-
-    // Optionally pass the transaction ID via query string when you set redirect_url
-    // e.g. https://yoursite.com/3ds-complete?txn=abc-123
-    const params = new URLSearchParams(window.location.search);
-    const transactionId = params.get('txn') || null;
-
-    window.parent.postMessage({
-      type: "TEYA_3DS_COMPLETE",
-      transactionId: transactionId   // useful for the parent
-      // Do NOT hard-code status: "SUCCESS"
-    }, parentOrigin);
-  </script>
-  <p>Challenge completed. Closing…</p>
+  <script>
+    // Change this to your real parent origin for better security
+    window.parent.postMessage({
+      type: "TEYA_3DS_COMPLETE",
+      status: "SUCCESS"
+    }, "*");
+  </script>
+  <p>Challenge completed. The iframe can now be closed.</p>
 </body>
 </html>
