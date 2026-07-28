@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>3DS Complete</title>
+</head>
+<body>
+  <script>
+    // Change this to your real parent origin for better security
+    window.parent.postMessage({
+      type: "TEYA_3DS_COMPLETE",
+      status: "SUCCESS"
+    }, "*");
+  </script>
+  <p>Processing…</p>
+</body>
+</html>
