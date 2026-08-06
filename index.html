@@ -13,6 +13,13 @@
         success: true
       };
 
+      // Optional: if the URL ever has ?authenticationId=... pick it up
+      try {
+        var params = new URLSearchParams(window.location.search);
+        var id = params.get('authenticationId') || params.get('authId');
+        if (id) payload.authenticationId = id;
+      } catch (e) {}
+
       function notify() {
         try {
           if (window.top && window.top !== window) {
