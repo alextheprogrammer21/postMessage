@@ -1,7 +1,3 @@
-<?php
-header('Content-Type: text/html; charset=utf-8');
-$authId = /* your authenticationId */;
-?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,27 +10,22 @@ $authId = /* your authenticationId */;
     (function () {
       var payload = {
         type: '3DS_COMPLETE',
-        authenticationId: <?= json_encode($authId) ?>,
         success: true
       };
 
       function notify() {
         try {
-          // Critical: ACS often nests frames → use top, not parent
           if (window.top && window.top !== window) {
             window.top.postMessage(payload, '*');
           }
         } catch (e) {}
         try {
-          // Belt-and-suspenders
           if (window.parent && window.parent !== window) {
             window.parent.postMessage(payload, '*');
           }
         } catch (e) {}
       }
 
-      // Fire immediately and a couple more times in case the listener
-      // was not ready during the navigation moment
       notify();
       setTimeout(notify, 100);
       setTimeout(notify, 400);
