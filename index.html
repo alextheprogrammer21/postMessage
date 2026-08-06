@@ -1,16 +1,21 @@
+<?php
+// after you have processed / stored the CRes / PaRes
+$authId = /* the authenticationId you already know */;
+header('Content-Type: text/html; charset=utf-8');
+?>
 <!DOCTYPE html>
 <html>
-<head>
-  <title>3DS Complete</title>
-</head>
+<head><title>3DS Complete</title></head>
 <body>
-  <script>
-    // Change this to your real parent origin for better security
-    window.parent.postMessage({
-      type: "TEYA_3DS_COMPLETE",
-      status: "SUCCESS"
-    }, "*");
-  </script>
-  <p>Challenge completed. The iframe can now be closed.</p>
+<script>
+  try {
+    window.parent.postMessage({
+      type: '3DS_COMPLETE',
+      authenticationId: <?= json_encode($authId) ?>,
+      success: true
+    }, '*');
+  } catch (e) {}
+</script>
+<p>Verification complete. You can close this window.</p>
 </body>
 </html>
