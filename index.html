@@ -1,21 +1,45 @@
 <?php
-// after you have processed / stored the CRes / PaRes
-$authId = /* the authenticationId you already know */;
 header('Content-Type: text/html; charset=utf-8');
+$authId = /* your authenticationId */;
 ?>
 <!DOCTYPE html>
 <html>
-<head><title>3DS Complete</title></head>
+<head>
+  <meta charset="utf-8">
+  <title>3DS Complete</title>
+</head>
 <body>
-<script>
-  try {
-    window.parent.postMessage({
-      type: '3DS_COMPLETE',
-      authenticationId: <?= json_encode($authId) ?>,
-      success: true
-    }, '*');
-  } catch (e) {}
-</script>
-<p>Verification complete. You can close this window.</p>
+  <p>Verification complete…</p>
+  <script>
+    (function () {
+      var payload = {
+        type: '3DS_COMPLETE',
+        authenticationId: <?= json_encode($authId) ?>,
+        success: true
+      };
+
+      function notify() {
+        try {
+          // Critical: ACS often nests frames → use top, not parent
+          if (window.top && window.top !== window) {
+            window.top.postMessage(payload, '*');
+          }
+        } catch (e) {}
+        try {
+          // Belt-and-suspenders
+          if (window.parent && window.parent !== window) {
+            window.parent.postMessage(payload, '*');
+          }
+        } catch (e) {}
+      }
+
+      // Fire immediately and a couple more times in case the listener
+      // was not ready during the navigation moment
+      notify();
+      setTimeout(notify, 100);
+      setTimeout(notify, 400);
+      setTimeout(notify, 1000);
+    })();
+  </script>
 </body>
 </html>
